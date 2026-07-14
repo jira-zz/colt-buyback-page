@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analýza zpětného odkupu akcií</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        .number {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+        }
+        .total-row {
+            background-color: #2c3e50 !important;
+            color: white;
+            font-weight: bold;
+        }
+        .total-row:hover {
+            background-color: #34495e !important;
+        }
+        .summary {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .summary h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .summary-number {
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+        }
+        .status-ok {
+            color: #1e8449;
+            font-weight: bold;
+        }
+        .status-warning {
+            color: #b03a2e;
+            font-weight: bold;
+        }
+        .timestamp {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 30px;
+        }
+        .older-weeks {
+            margin-top: 16px;
+        }
+        .older-weeks summary {
+            cursor: pointer;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Analýza zpětného odkupu akcií</h1>
+        
+        <div class="summary">
+            <h3>Celkové součty</h3>
+            <div class="summary-item">
+                <span>Celkem nakoupených akcií:</span>
+                <span class="summary-number">795 976 ks</span>
+            </div>
+            <div class="summary-item">
+                <span>Celkový objem:</span>
+                <span class="summary-number">718 357 221 Kč</span>
+            </div>
+            <div class="summary-item">
+                <span>Celková průměrná cena:</span>
+                <span class="summary-number">902,49 Kč</span>
+            </div>
+        </div>
+
+        <div class="summary">
+            <h3>Stav zpětného odkupu</h3>
+            <div class="summary-item">
+                <span>Aktuální cena akcie:</span>
+                <span class="summary-number">894,00 Kč</span>
+            </div>
+            <div class="summary-item">
+                <span>Zbývající částka k odkupu:</span>
+                <span class="summary-number">128 642 779 Kč</span>
+            </div>
+            <div class="summary-item">
+                <span>Zbývající obchodní dny:</span>
+                <span class="summary-number">0</span>
+            </div>
+            <div class="summary-item">
+                <span>Zbývající počet akcií k odkupu (při aktuální ceně):</span>
+                <span class="summary-number">143 895 ks</span>
+            </div>
+            <div class="summary-item">
+                <span>Denní cíl (částka):</span>
+                <span class="summary-number">0 Kč</span>
+            </div>
+            <div class="summary-item">
+                <span>Denní cíl (akcie):</span>
+                <span class="summary-number">0 ks</span>
+            </div>
+            <div class="summary-item">
+                <span>Maximálně lze ještě odkoupit:</span>
+                <span class="summary-number">0 ks</span>
+            </div>
+            <div class="summary-item">
+                <span>Maximálně lze ještě utratit:</span>
+                <span class="summary-number">0 Kč</span>
+            </div>
+            <div class="summary-item">
+                <span>Stihnou vyčerpat celý program:</span>
+                <span class="summary-number status-warning">NE</span>
+            </div>
+            <div class="summary-item">
+                <span>Chybějící kapacita:</span>
+                <span class="summary-number">143 895 ks / 128 642 779 Kč</span>
+            </div>
+            <div class="summary-item">
+                <span>Maximální denní počet akcií:</span>
+                <span class="summary-number">11 817 ks</span>
+            </div>
+            <div class="summary-item">
+                <span>Minimální datum zahájení (pro vyčerpání všech prostředků):</span>
+                <span class="summary-number">02.03.2026</span>
+            </div>
+        </div>
+
+        <h2>Týdenní přehled</h2>
+        
+        
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Období</th>
+                    <th class="number">Nakoupené akcie (ks)</th>
+                    <th class="number">Objem (Kč)</th>
+                    <th class="number">Průměrná cena (Kč)</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Týden (22.06.2026 - 26.06.2026)</td>
+                    <td class="number">51 933</td>
+                    <td class="number">47 738 346</td>
+                    <td class="number">919,23</td>
+                </tr>
+                
+                <tr>
+                    <td>Týden (15.06.2026 - 19.06.2026)</td>
+                    <td class="number">52 717</td>
+                    <td class="number">50 991 921</td>
+                    <td class="number">967,28</td>
+                </tr>
+                
+                <tr>
+                    <td>Týden (08.06.2026 - 12.06.2026)</td>
+                    <td class="number">56 204</td>
+                    <td class="number">57 213 243</td>
+                    <td class="number">1 017,96</td>
+                </tr>
+                
+                <tr>
+                    <td>Týden (01.06.2026 - 05.06.2026)</td>
+                    <td class="number">47 277</td>
+                    <td class="number">49 033 168</td>
+                    <td class="number">1 037,15</td>
+                </tr>
+                
+                <tr>
+                    <td>Týden (25.05.2026 - 29.05.2026)</td>
+                    <td class="number">23 856</td>
+                    <td class="number">25 034 978</td>
+                    <td class="number">1 049,42</td>
+                </tr>
+                
+                <tr>
+                    <td>Týden (18.05.2026 - 22.05.2026)</td>
+                    <td class="number">11 968</td>
+                    <td class="number">12 452 148</td>
+                    <td class="number">1 040,45</td>
+                </tr>
+                
+                <tr>
+                    <td>Týden (11.05.2026 - 15.05.2026)</td>
+                    <td class="number">59 085</td>
+                    <td class="number">61 071 090</td>
+                    <td class="number">1 033,61</td>
+                </tr>
+                
+                <tr>
+                    <td>Týden (04.05.2026 - 07.05.2026)</td>
+                    <td class="number">23 934</td>
+                    <td class="number">25 052 288</td>
+                    <td class="number">1 046,72</td>
+                </tr>
+                
+                <tr class="total-row">
+                    <td><strong>CELKEM</strong></td>
+                    <td class="number"><strong>795 976</strong></td>
+                    <td class="number"><strong>718 357 221</strong></td>
+                    <td class="number"><strong>902,49</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+        <details class="older-weeks">
+            <summary>Zobrazit starší týdny (13)</summary>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Období</th>
+                        <th class="number">Nakoupené akcie (ks)</th>
+                        <th class="number">Objem (Kč)</th>
+                        <th class="number">Průměrná cena (Kč)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>Týden (27.04.2026 - 30.04.2026)</td>
+                        <td class="number">29 163</td>
+                        <td class="number">30 545 278</td>
+                        <td class="number">1 047,40</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (13.04.2026 - 17.04.2026)</td>
+                        <td class="number">54 772</td>
+                        <td class="number">55 353 501</td>
+                        <td class="number">1 010,62</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (06.04.2026 - 10.04.2026)</td>
+                        <td class="number">42 554</td>
+                        <td class="number">42 344 828</td>
+                        <td class="number">995,08</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (30.03.2026 - 02.04.2026)</td>
+                        <td class="number">32 314</td>
+                        <td class="number">29 297 584</td>
+                        <td class="number">906,65</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (23.03.2026 - 27.03.2026)</td>
+                        <td class="number">35 451</td>
+                        <td class="number">31 645 064</td>
+                        <td class="number">892,64</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (29.12.2025 - 02.01.2026)</td>
+                        <td class="number">3 063</td>
+                        <td class="number">2 264 620</td>
+                        <td class="number">739,35</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (22.12.2025 - 26.12.2025)</td>
+                        <td class="number">16 834</td>
+                        <td class="number">12 274 592</td>
+                        <td class="number">729,15</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (15.12.2025 - 19.12.2025)</td>
+                        <td class="number">56 268</td>
+                        <td class="number">40 446 735</td>
+                        <td class="number">718,82</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (08.12.2025 - 12.12.2025)</td>
+                        <td class="number">46 751</td>
+                        <td class="number">33 674 659</td>
+                        <td class="number">720,30</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (01.12.2025 - 05.12.2025)</td>
+                        <td class="number">52 966</td>
+                        <td class="number">38 141 097</td>
+                        <td class="number">720,11</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (24.11.2025 - 28.11.2025)</td>
+                        <td class="number">51 598</td>
+                        <td class="number">37 189 592</td>
+                        <td class="number">720,76</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Týden (07.07.2025 - 11.07.2025)</td>
+                        <td class="number">35 451</td>
+                        <td class="number">25 775 421</td>
+                        <td class="number">727,07</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>N/A</td>
+                        <td class="number">11 817</td>
+                        <td class="number">10 817 068</td>
+                        <td class="number">915,38</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </details>
+        
+        <div class="timestamp">
+            Vygenerováno: 14.07.2026 11:40:46
+        </div>
+    </div>
+</body>
+</html>
